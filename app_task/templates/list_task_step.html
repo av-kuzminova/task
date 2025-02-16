@@ -1,0 +1,79 @@
+{% load poll_extras %}
+{% my_hp view.task as perms %}
+
+{% firstof "list" as oper %}
+{% if not view.task.date_end and view.kwargs.oper == "add" and view.kwargs.model == view.url_name %}
+    {% if perms.is_author or perms.is_user or view.request.user.is_superuser %}
+        {% firstof "add" as oper %}
+    {% endif %}
+{% endif %}
+
+<div class="row">
+    <div class="align-self-center col-2">
+        &nbsp;
+        {% if not view.task.date_end and not view.kwargs.oper == "add" %}
+            {% if perms.is_author or perms.is_user or view.request.user.is_superuser %}
+                {% include "buttons.html" with btn_max="add" model=view.url_name pk=view.kwargs.pk %}
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="h2 align-self-center col">
+        История выполнения задачи<br>
+        {% include "paginate.html" %}
+    </div>
+</div>
+
+{% if oper == "add" %}
+<form action="" method="post" class="mb-3">
+    {% csrf_token %}
+    {% comment %} <div class="btn btn-light border pe-none text-start fw-bold mb-1">
+        {% now "d.m.Y H:i:s" %} - 
+        {{ view.request.user.username }}
+    </div> {% endcomment %}
+
+     <div>
+        <textarea class="form-control"
+        rows="3"
+        type="text" 
+        name="{{ view.fld.desc.name }}"
+        required
+        placeholder="{{view.fld.desc.help_text}}"
+        id="id_{{ view.fld.desc.name }}"></textarea>
+    </div>
+
+    <div class="col d-flex justify-content-end align-items-center mb-1 mt-2">
+        <div class="me-3">
+            {% include "buttons.html" with btn_max="back" %}
+        </div>
+        <input id="btn-task-submit"
+        type="submit" 
+        value="Создать"
+        class="btn btn-primary"
+        >
+    </div>
+    <script>
+        el = document.getElementById("id_{{ view.fld.desc.name }}");
+        el.focus();
+        el.selectionStart = el.selectionEnd = el.value.length;
+    </script>
+</form>
+{% endif %}
+
+<table class="table table-sm table-hover align-middle">
+    <tbody>
+    {% for item in data %}
+    <tr>
+        <td>
+            <span class="fw-bold">
+                {{ item.date_end|date:"d.m.Y H:i:s" }} - {{ item.author.username }}
+            </span>
+            <br>
+            <span style="white-space: pre-line;">{{ item.desc }}</span>
+        </td>
+    </tr>
+    {% empty %}
+        <span class="pe-none btn border-0">Нет истории</span>
+    {% endfor %}
+    </tbody>
+</table>

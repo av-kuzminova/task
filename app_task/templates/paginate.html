@@ -1,0 +1,131 @@
+
+{% load poll_extras %}
+{% my_g view.get_par as get_par %}
+
+{# вывод кнопок пагинации если она есть #}
+{% if is_paginated and page_obj.paginator.num_pages > 1 %}
+<ul class="pagination pagination-sm mb-0">
+    <li class="page-item">
+        <a class="page-link"
+        href="{% my_g get_par view.page_kwarg 1 %}"
+        title="Первая">
+          &laquo;&laquo;
+        </a>
+    </li>
+    <li class="page-item">
+      <a class="page-link"
+      {% if page_obj.has_previous %}
+      href="{% my_g get_par view.page_kwarg page_obj.previous_page_number %}"
+      {% else %}
+      href="{% my_g get_par view.page_kwarg 1 %}"
+      {% endif %}
+      title="Предыдущая">
+      &nbsp;&laquo;&nbsp;
+      </a>
+    </li>
+    <li class="page-item">
+      <span 
+      class="page-link"
+      title="Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}">
+        {{ page_obj.number }}-{{ page_obj.paginator.num_pages }}
+      </span>
+    </li>
+    <li class="page-item">
+        <a class="page-link" 
+        {% if page_obj.has_next %}
+        href="{% my_g get_par view.page_kwarg page_obj.next_page_number %}"
+        {% else %}
+        href="{% my_g get_par view.page_kwarg page_obj.paginator.num_pages %}"
+        {% endif %}
+        title="Следующая">
+          &nbsp;&raquo;&nbsp;
+        </a>
+    </li>
+    <li class="page-item">
+        <a class="page-link" 
+        href="{% my_g get_par view.page_kwarg page_obj.paginator.num_pages %}"
+        title="Последняя">
+          &raquo;&raquo;
+        </a>
+    </li>
+    {% comment %} <li>
+      <span class="btn pe-none">
+        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+      </span>
+    </li> {% endcomment %}
+  </ul>
+{% endif %}
+
+{% comment %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?{{ view.get_par }}&{{view.page_kwarg}}=1">&laquo; Первая</a>
+            <a href="?{{ view.get_par }}&{{view.page_kwarg}}={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?{{ view.get_par }}&{{view.page_kwarg}}={{ page_obj.next_page_number }}">Следующая</a>
+            <a href="?{{ view.get_par }}&{{view.page_kwarg}}={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<nav aria-label="Пример навигации по страницам">
+    <ul class="pagination">
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Предыдущая">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Следующая">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <nav aria-label="Пример навигации по страницам">
+    <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="#">Предыдущая</a></li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item"><a class="page-link" href="#">Следующая</a></li>
+    </ul>
+  </nav>
+
+  <nav aria-label="...">
+    <ul class="pagination">
+      <li class="page-item disabled">
+        <span class="page-link">Предыдущая</span>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item active" aria-current="page">
+        <span class="page-link">2</span>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Следующая</a>
+      </li>
+    </ul>
+  </nav>
+
+  <nav aria-label="...">
+    <ul class="pagination pagination-sm">
+      <li class="page-item active" aria-current="page">
+        <span class="page-link">1</span>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+    </ul>
+  </nav>
+  {% endcomment %}

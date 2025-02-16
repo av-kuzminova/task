@@ -1,0 +1,14 @@
+.required {
+    font-weight: bold;
+}
+
+.required::after {
+    content: "*";
+    color: red;
+}
+
+.nav-item .nav-link.active {
+    font-weight: bold;
+    color: #000; /* Цвет текста для активного пункта */
+    background-color: #f8f9fa; /* Цвет фона для активного пункта */
+}

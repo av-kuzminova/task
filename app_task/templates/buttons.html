@@ -1,0 +1,129 @@
+{% load poll_extras %}
+{% my_g view.get_par as get_par %}
+
+{% for btn in btn_max.split %}
+    {% if btn == "back" %}
+        <input id="btn-{{model}}-back"
+        type=button 
+        value="Назад" 
+        class="btn btn-sm btn-outline-dark" 
+        onClick="javascript:history.go(-1);"
+        >
+    {% endif %}
+    {% if btn == "forw" %}
+        <input id="btn-{{model}}-forward"
+        type=button 
+        value="Вперёд" 
+        class="btn btn-sm btn-outline-dark" 
+        onClick="javascript:history.go(1);"
+        >
+    {% endif %}
+    {% if btn == "users" or btn == "users2" %}
+    <div class="btn-group">
+        <a id="btn-{{model}}-u-all" href="{% my_g get_par view.url_user "all" view.page_kwarg "1" %}"
+        class="btn btn-sm btn-outline-secondary {% if view.url_user|add:"=all" in get_par  %}active{% endif %}"
+        title="Без отбора по автору и/или исполнителю">
+            Без отбора
+        </a>
+        <a id="btn-{{model}}-u-aut" href="{% my_g get_par view.url_user "aut" view.page_kwarg "1" %}"
+        class="btn btn-sm btn-outline-secondary {% if view.url_user|add:"=aut" in get_par  %}active{% endif %}"
+        title="Автор - текущий пользователь">
+            Автор
+        </a>
+        {% if btn == "users" %}
+        <a id="btn-{{model}}-u-usr" href="{% my_g get_par view.url_user "usr" view.page_kwarg "1" %}"
+        class="btn btn-sm btn-outline-secondary {% if view.url_user|add:"=usr" in get_par  %}active{% endif %}"
+        title="Исполнитель - текущий пользователь">
+            Исполнитель
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if btn == "items" %}
+    <div class="btn-group">
+        <a id="btn-{{model}}-f-all" href="{% my_g get_par view.url_filt "all" view.page_kwarg "1" %}"
+        class="btn btn-sm btn-outline-secondary {% if view.url_filt|add:"=all" in get_par  %}active{% endif %}"
+        title="Всё: выполненные и не выполненные">
+            Весь список
+        </a>
+        <a id="btn-{{model}}-f-on" href="{% my_g get_par view.url_filt "on" view.page_kwarg "1" %}"
+        class="btn btn-sm btn-outline-secondary {% if view.url_filt|add:"=on" in get_par %}active{% endif %}"
+        title="Только выполненные">
+            Выполнено
+        </a>
+        <a id="btn-{{model}}-f-off" href="{% my_g get_par view.url_filt "off" view.page_kwarg "1" %}"
+        class="btn btn-sm btn-outline-secondary {% if view.url_filt|add:"=off" in get_par %}active{% endif %}"
+        title="Только не выполненные, в работе">
+            В работе
+        </a>
+    </div>
+    {% endif %}
+    {% if btn == "index" %}
+        <a id="btn-{{model}}-index" href={% url "index" %} 
+        class="btn btn-sm btn-outline-dark">
+            На главную
+        </a>
+    {% endif %}
+    {% if btn == "add" and perms.add %}
+        <a id="btn-{{model}}-add" href={% url "add" model=model %}{% my_g "" model=view.kwargs.model pk=view.kwargs.pk %}
+        class="btn btn-sm btn-outline-primary">
+            Добавить
+        </a>
+    {% endif %}
+    {% if btn == "edit" and perms.edit %}
+        <a id="btn-{{model}}-edit" href={% url "oper" oper="edit" model=model pk=pk %}
+        class="btn btn-sm btn-outline-success">
+            Редактировать
+        </a>
+    {% endif %}
+    {% if btn == "detail" and perms.detail %}
+        <a id="btn-{{model}}-detail" href={% url "detail" model=model pk=pk %}
+        class="btn btn-sm btn-outline-dark">
+            Просмотр
+        </a>
+    {% endif %}
+    {% if btn == "delete" and perms.delete %}
+        <a id="btn-{{model}}-delete" href={% url "oper" oper="delete" model=model pk=pk %} 
+        class="btn btn-sm btn-outline-danger">
+            Удалить
+        </a>
+    {% endif %}
+    {% if btn == "cancel" %}
+        <a id="btn-{{model}}-cancel" href={% url "detail" model=model pk=pk %} 
+        class="btn btn-sm btn-outline-dark">
+            Отменить
+        </a>
+    {% endif %}
+{% endfor %}
+
+{% for btn in btn_min.split %}
+    {% if btn == "add" and perms.add %}
+        <a id="btn-{{model}}-m-add" href={% url "add" model=model %}{% my_g "" model=view.kwargs.model pk=view.kwargs.pk %}
+        class="btn btn-sm btn-outline-primary"
+        title="Добавить">
+            <i class="bi bi-plus-circle"></i>
+        </a>
+    {% endif %}
+    {% if btn == "edit" and perms.edit %}
+        <a id="btn-{{model}}-m-edit" href={% url "oper" oper="edit" model=model pk=pk %} 
+        class="btn btn-sm btn-outline-success"
+        title="Редактировать">
+            <i class="bi bi-pencil"></i>
+        </a>
+    {% endif %}
+    {% if btn == "detail" and perms.detail %}
+        <a id="btn-{{model}}-m-detail" href={% url "oper" oper="detail" model=model pk=pk %} 
+        class="btn btn-sm btn-outline-dark"
+        title="Просмотр">
+            <i class="bi bi-eye"></i>
+        </a>
+    {% endif %}
+    {% if btn == "delete" and perms.delete %}
+        <a id="btn-{{model}}-m-delete" href={% url "oper" oper="delete" model=model pk=pk %} 
+        class="btn btn-sm btn-outline-danger"
+        title="Удалить">
+            <i class="bi bi-trash"></i>
+        </a>
+    {% endif %}
+    
+{% endfor %}
